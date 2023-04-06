@@ -4,18 +4,30 @@ using System.Diagnostics;
 
 namespace la_mia_pizzeria_static.Controllers
 {
-    public class HomeController : Controller
+    public class PizzaController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<PizzaController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public PizzaController(ILogger<PizzaController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            using var ctx = new PizzeriaContext();
+
+            var pizzas = ctx.Pizzas.ToArray();
+            return View(pizzas);
+        }
+
+        public IActionResult Detail(int id)
+        {
+            using var ctx = new PizzeriaContext();
+
+           var pizza = ctx.Pizzas.Single(p => p.Id == id);
+
+           return View(pizza);
         }
 
         public IActionResult Privacy()
